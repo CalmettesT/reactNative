@@ -2,8 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import HomeIcon from '@mui/icons-material/Home';
+import { Ionicons } from '@expo/vector-icons';
 
 // Importation des écrans
 import HomeScreen from './Screens/HomeScreen';
@@ -13,7 +12,6 @@ import ProfileScreen from './Screens/ProfileScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Ceci est la pile d'accueil qui contient tous les écrans liés au flux d'accueil
 const HomeStack = () => {
   return (
     <Stack.Navigator initialRouteName="HomeScreen">
@@ -22,8 +20,7 @@ const HomeStack = () => {
         component={HomeScreen} 
         options={{ 
           title: 'Accueil',
-          headerShown: false,  // Ajoutez cette ligne
-          headerTitle: HomeIcon,
+          headerShown: false,
         }} 
       />
     </Stack.Navigator>
@@ -38,7 +35,7 @@ const QuestionStack = () => {
         component={QuestionScreen} 
         options={{ 
           title: 'Questionnaire',
-          headerShown: false  // Ajoutez cette ligne
+          headerShown: false
         }} 
       />
     </Stack.Navigator>
@@ -53,7 +50,7 @@ const ProfileStack = () => {
         component={ProfileScreen} 
         options={{ 
           title: 'Profil',
-          headerShown: false  // Ajoutez cette ligne
+          headerShown: false
         }} 
       />
     </Stack.Navigator>
@@ -63,7 +60,27 @@ const ProfileStack = () => {
 const MainNavigator = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator 
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = focused ? 'home' : 'home-outline';
+            } else if (route.name === 'Questionnaire') {
+              iconName = focused ? 'help-circle' : 'help-circle-outline';
+            } else if (route.name === 'Profil') {
+              iconName = focused ? 'person' : 'person-outline';
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}
+      >
         <Tab.Screen name="Home" component={HomeStack} />
         <Tab.Screen name="Questionnaire" component={QuestionStack} />
         <Tab.Screen name="Profil" component={ProfileStack} />
